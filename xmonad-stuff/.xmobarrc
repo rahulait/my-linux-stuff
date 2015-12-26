@@ -1,0 +1,18 @@
+Config  { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
+        , bgColor = "black"
+        , fgColor = "grey" 
+        , position = Top L 90
+        , commands = [ Run MultiCpu ["-t", "CPU: <autototal>%","-L","3","-H","50","--normal","green","--high","red"] 10
+                     , Run Memory ["-t","Mem: <usedratio>%"] 10
+                     , Run Swap [] 10
+                     , Run Battery ["-t","Batt: <left>% / <timeleft>", "--", "energy_full"] 10
+                     , Run Date "%a %b %_d %l:%M" "date" 10
+                     , Run Wireless "wlan0" [] 10
+                     , Run Network "eth0" [] 10
+		     , Run Com "/home/rahuls/.xmonad/getvolume.sh" [] "vol" 10
+                     , Run StdinReader 
+                     ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "%StdinReader% }{ %multicpu% | %memory% * %swap% | %battery% | %wlan0wi% | %eth0% | %vol% | %date% "
+        }
