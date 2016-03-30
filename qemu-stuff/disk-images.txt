@@ -1,0 +1,39 @@
+1. Create qemu image:-
+bash# qemu-img create webserver.raw 10G
+
+2. List the image:-
+bash# qemu-img info webserver.raw
+
+3. Resizing the image by 2GB:-
+bash# qemu-img resize webserver.raw +2G
+
+4. Converting from raw to qcow2:-
+bash$ qemu-img convert -O qcow2 webserver.raw webserver.qcow
+bash$ qemu-img info webserver.qcow
+
+5. Converting from qcow2 to raw:-
+bash$ qemu-img convert -O raw webserver.qcow webserver.raw
+
+Credits: http://lnx.cx/docs/vdg/output/Virtual-Disk-Operations.html
+Disk with backing image:-
+a) This involves creating a disk, installing OS on it, doing whatever changes one wants on that image and when its final, its made read-only.
+bash$ mkdir base-images
+bash$ mkdir other-images
+bash$ cd base-images
+bash$ qemu-img create -f qcow2 webserver.qcow2 10G
+Install OS and your changes.
+
+b) Create a backup image:-
+bash$ cd ../other-images
+bash$ qemu-img create -b ../base-images/webserver.qcow2 -f qcow2 test-img.qcow2
+NOTE: No size specified in the above image.
+
+Now, whatever changes one do on test-img.qcow2, that particular disk page is first copied from base image, and then stored at the test-img.qcow2 location. We can revert to original webserver.qcow2 image at any time.
+
+
+Committing changes to backing image:-
+qemu-img commit ../base-images/webserver.qcow2
+
+
+Cloning a physical disk:-
+
